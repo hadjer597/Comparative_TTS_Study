@@ -5,9 +5,9 @@ import numpy as np
 import soundfile as sf
 
 
-WAV_PATH = "resultsW/concatenative_tts.wav"
+WAV_PATH = "resultsW/parametric_tts.wav"
 
-ELAPSED_TIME = 0.10  
+ELAPSED_TIME = 0.45   
 
 y, sr = librosa.load(WAV_PATH, sr=None)
 
@@ -62,8 +62,7 @@ jitter = np.nanmean(np.abs(np.diff(periods)))
 amplitudes = np.abs(y)
 shimmer = np.mean(np.abs(np.diff(amplitudes)))
 
-
-print("\n📊 Concatenative TTS Metrics:\n")
+print("\n📊 Parametric TTS Metrics:\n")
 
 print(f"Elapsed Time (s): {ELAPSED_TIME:.2f}")
 print(f"Audio Duration (s): {audio_duration:.2f}")

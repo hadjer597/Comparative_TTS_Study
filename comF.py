@@ -4,14 +4,14 @@ import librosa
 import numpy as np
 import soundfile as sf
 
+WAV_PATH = "resultsW/fastpitch_tts.wav"
 
-WAV_PATH = "resultsW/concatenative_tts.wav"
 
-ELAPSED_TIME = 0.10  
+ELAPSED_TIME = 6.37  
 
 y, sr = librosa.load(WAV_PATH, sr=None)
 
-# ---------------- المعايير الزمنية ----------------
+
 audio_duration = librosa.get_duration(y=y, sr=sr)
 rtf = ELAPSED_TIME / audio_duration
 
@@ -44,6 +44,9 @@ spectral_centroid = np.mean(
 spectral_bandwidth = np.mean(
     librosa.feature.spectral_bandwidth(y=y, sr=sr)
 )
+spectral_rolloff = np.mean(
+    librosa.feature.spectral_rolloff(y=y, sr=sr)
+)
 
 # ---------------- SNR ----------------
 signal_power = np.mean(y ** 2)
@@ -55,7 +58,7 @@ mel = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=80)
 mel_db = librosa.power_to_db(mel)
 log_mel_energy = np.mean(np.abs(mel_db))
 
-# ---------------- Jitter & Shimmer (تقريبي) ----------------
+# ---------------- Jitter & Shimmer  ----------------
 periods = 1 / f0
 jitter = np.nanmean(np.abs(np.diff(periods)))
 
@@ -63,7 +66,7 @@ amplitudes = np.abs(y)
 shimmer = np.mean(np.abs(np.diff(amplitudes)))
 
 
-print("\n📊 Concatenative TTS Metrics:\n")
+print("\n📊 FastPitch Metrics:\n")
 
 print(f"Elapsed Time (s): {ELAPSED_TIME:.2f}")
 print(f"Audio Duration (s): {audio_duration:.2f}")
@@ -81,6 +84,7 @@ print(f"Energy Variability: {energy_variability:.4f}")
 print("\n🌈 Spectral Metrics:")
 print(f"Spectral Centroid: {spectral_centroid:.2f}")
 print(f"Spectral Bandwidth: {spectral_bandwidth:.2f}")
+print(f"Spectral Rolloff: {spectral_rolloff:.2f}")
 
 print("\n📐 Advanced Metrics:")
 print(f"SNR (dB): {snr:.2f}")
